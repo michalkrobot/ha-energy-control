@@ -1,0 +1,162 @@
+{
+  "config": {
+    "abort": {
+      "single_instance_allowed": "Only a single HA Energy Control instance is supported."
+    },
+    "step": {
+      "user": {
+        "title": "HA Energy Control setup",
+        "description": "Configure energy sensors and controller behavior.",
+        "data": {
+          "fve_load_power_sensor": "Load power sensor",
+          "fve_grid_power_sensor": "Grid power sensor",
+          "fve_pv_power_sensor": "PV power sensor",
+          "fve_battery_power_sensor": "Battery power sensor",
+          "fve_battery_soc_sensor": "Battery SOC sensor",
+          "fve_battery_capacity": "Battery capacity (Wh)",
+          "fve_battery_soc_min": "Minimum battery SOC (%)",
+          "fve_battery_max_power_in": "Battery max charge power (W)",
+          "fve_battery_max_power_out": "Battery max discharge power (W)",
+          "use_forecast_solar": "Use Forecast.Solar",
+          "use_openweather": "Use OpenWeather",
+          "update_interval_sec": "Update interval (seconds)",
+          "decision_interval_sec": "Decision interval (seconds)",
+          "history_in_minutes": "History window (minutes)",
+          "analytics": "Enable analytics",
+          "treshold_power": "Power threshold (W)",
+          "force_stop_power": "Force stop threshold (W)"
+        }
+      },
+      "appliances": {
+        "title": "Appliances",
+        "description": "Add one or more appliances, then finish setup.",
+        "menu_options": {
+          "add_appliance": "Add appliance",
+          "finish": "Finish setup"
+        }
+      },
+      "add_appliance": {
+        "title": "Add appliance",
+        "description": "Define a single controllable appliance.",
+        "data": {
+          "name": "Name",
+          "type": "Type",
+          "min_power": "Min power (W)",
+          "max_power": "Max power (W, wallbox)",
+          "step_power": "Step power (W, wallbox)",
+          "power_sensor": "Power sensor",
+          "switch_sensor": "Switch or state sensor",
+          "availability_sensor": "Availability sensor",
+          "static_priority": "Static priority",
+          "priority_sensor": "Dynamic priority sensor (optional)",
+          "minimal_running_minutes": "Minimal running minutes",
+          "startup_time_minutes": "Startup time (minutes)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HA Energy Control options",
+        "description": "Edit base settings or manage appliance list.",
+        "menu_options": {
+          "edit_base": "Edit base settings",
+          "manage_appliances": "Manage appliances",
+          "finish": "Save and reload"
+        }
+      },
+      "edit_base": {
+        "title": "Edit base settings",
+        "description": "Update sensor mapping and controller parameters.",
+        "data": {
+          "fve_load_power_sensor": "Load power sensor",
+          "fve_grid_power_sensor": "Grid power sensor",
+          "fve_pv_power_sensor": "PV power sensor",
+          "fve_battery_power_sensor": "Battery power sensor",
+          "fve_battery_soc_sensor": "Battery SOC sensor",
+          "fve_battery_capacity": "Battery capacity (Wh)",
+          "fve_battery_soc_min": "Minimum battery SOC (%)",
+          "fve_battery_max_power_in": "Battery max charge power (W)",
+          "fve_battery_max_power_out": "Battery max discharge power (W)",
+          "use_forecast_solar": "Use Forecast.Solar",
+          "use_openweather": "Use OpenWeather",
+          "update_interval_sec": "Update interval (seconds)",
+          "decision_interval_sec": "Decision interval (seconds)",
+          "history_in_minutes": "History window (minutes)",
+          "analytics": "Enable analytics",
+          "treshold_power": "Power threshold (W)",
+          "force_stop_power": "Force stop threshold (W)"
+        }
+      },
+      "manage_appliances": {
+        "title": "Manage appliances",
+        "description": "Add, remove, or clear appliance definitions.",
+        "menu_options": {
+          "options_add_appliance": "Add appliance",
+          "options_edit_appliance": "Edit appliance",
+          "options_remove_appliance": "Remove appliance",
+          "options_clear_appliances": "Clear all appliances",
+          "init": "Back"
+        }
+      },
+      "options_add_appliance": {
+        "title": "Add appliance",
+        "description": "Currently configured: {count}",
+        "data": {
+          "name": "Name",
+          "type": "Type",
+          "min_power": "Min power (W)",
+          "max_power": "Max power (W, wallbox)",
+          "step_power": "Step power (W, wallbox)",
+          "power_sensor": "Power sensor",
+          "switch_sensor": "Switch or state sensor",
+          "availability_sensor": "Availability sensor",
+          "static_priority": "Static priority",
+          "priority_sensor": "Dynamic priority sensor (optional)",
+          "minimal_running_minutes": "Minimal running minutes",
+          "startup_time_minutes": "Startup time (minutes)"
+        }
+      },
+      "options_remove_appliance": {
+        "title": "Remove appliance",
+        "description": "Currently configured: {count}",
+        "data": {
+          "appliance": "Appliance"
+        }
+      },
+      "options_edit_appliance": {
+        "title": "Edit appliance",
+        "description": "Currently configured: {count}",
+        "data": {
+          "appliance": "Appliance"
+        }
+      },
+      "options_edit_appliance_values": {
+        "title": "Edit appliance values",
+        "description": "Editing: {name}",
+        "data": {
+          "name": "Name",
+          "type": "Type",
+          "min_power": "Min power (W)",
+          "max_power": "Max power (W, wallbox)",
+          "step_power": "Step power (W, wallbox)",
+          "power_sensor": "Power sensor",
+          "switch_sensor": "Switch or state sensor",
+          "availability_sensor": "Availability sensor",
+          "static_priority": "Static priority",
+          "priority_sensor": "Dynamic priority sensor (optional)",
+          "minimal_running_minutes": "Minimal running minutes",
+          "startup_time_minutes": "Startup time (minutes)"
+        }
+      },
+      "options_clear_appliances": {
+        "title": "Clear all appliances",
+        "description": "Currently configured: {count}. Confirm to remove all.",
+        "data": {
+          "confirm": "Yes, remove all"
+        }
+      }
+    }
+  }
+}
