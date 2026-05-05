@@ -51,3 +51,6 @@ Then restart Home Assistant and add the integration in the UI.
 - Keep `hacs.json` in repository root.
 - Keep integration in `custom_components/ha_energy_control`.
 - Publish GitHub releases for stable version tracking in HACS.
+
+This repository includes a GitHub Actions workflow that automatically creates a
+GitHub Release when you push a tag matching `v*` (for example `v0.4.3`).
