@@ -30,6 +30,9 @@
       "appliances": {
         "title": "Appliances",
         "description": "Add one or more appliances, then finish setup.",
+        "data": {
+          "action": "Action"
+        },
         "menu_options": {
           "add_appliance": "Add appliance",
           "finish": "Finish setup"
@@ -60,6 +63,9 @@
       "init": {
         "title": "HA Energy Control options",
         "description": "Edit base settings or manage appliance list.",
+        "data": {
+          "action": "Action"
+        },
         "menu_options": {
           "edit_base": "Edit base settings",
           "manage_appliances": "Manage appliances",
@@ -92,6 +98,9 @@
       "manage_appliances": {
         "title": "Manage appliances",
         "description": "Add, remove, or clear appliance definitions.",
+        "data": {
+          "action": "Action"
+        },
         "menu_options": {
           "options_add_appliance": "Add appliance",
           "options_edit_appliance": "Edit appliance",

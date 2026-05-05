@@ -167,10 +167,24 @@ class FVEControlConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_appliances(self, user_input=None):
-        """Show appliance action menu."""
-        return self.async_show_menu(
+        """Show appliance action selector."""
+        if user_input is not None:
+            if user_input["action"] == "add_appliance":
+                return await self.async_step_add_appliance()
+            return await self.async_step_finish()
+
+        return self.async_show_form(
             step_id="appliances",
-            menu_options=["add_appliance", "finish"],
+            data_schema=vol.Schema(
+                {
+                    vol.Required("action"): vol.In(
+                        {
+                            "add_appliance": "Add appliance",
+                            "finish": "Finish setup",
+                        }
+                    )
+                }
+            ),
         )
 
     async def async_step_add_appliance(self, user_input=None):
@@ -218,10 +232,28 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
         self._selected_appliance_idx: int | None = None
 
     async def async_step_init(self, user_input=None):
-        """Main options menu."""
-        return self.async_show_menu(
+        """Main options action selector."""
+        if user_input is not None:
+            action = user_input["action"]
+            if action == "edit_base":
+                return await self.async_step_edit_base()
+            if action == "manage_appliances":
+                return await self.async_step_manage_appliances()
+            return await self.async_step_finish()
+
+        return self.async_show_form(
             step_id="init",
-            menu_options=["edit_base", "manage_appliances", "finish"],
+            data_schema=vol.Schema(
+                {
+                    vol.Required("action"): vol.In(
+                        {
+                            "edit_base": "Edit base settings",
+                            "manage_appliances": "Manage appliances",
+                            "finish": "Save and reload",
+                        }
+                    )
+                }
+            ),
         )
 
     async def async_step_edit_base(self, user_input=None):
@@ -237,16 +269,34 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
         )
 
     async def async_step_manage_appliances(self, user_input=None):
-        """Manage appliance list."""
-        return self.async_show_menu(
+        """Manage appliance list actions."""
+        if user_input is not None:
+            action = user_input["action"]
+            if action == "options_add_appliance":
+                return await self.async_step_options_add_appliance()
+            if action == "options_edit_appliance":
+                return await self.async_step_options_edit_appliance()
+            if action == "options_remove_appliance":
+                return await self.async_step_options_remove_appliance()
+            if action == "options_clear_appliances":
+                return await self.async_step_options_clear_appliances()
+            return await self.async_step_init()
+
+        return self.async_show_form(
             step_id="manage_appliances",
-            menu_options=[
-                "options_add_appliance",
-                "options_edit_appliance",
-                "options_remove_appliance",
-                "options_clear_appliances",
-                "init",
-            ],
+            data_schema=vol.Schema(
+                {
+                    vol.Required("action"): vol.In(
+                        {
+                            "options_add_appliance": "Add appliance",
+                            "options_edit_appliance": "Edit appliance",
+                            "options_remove_appliance": "Remove appliance",
+                            "options_clear_appliances": "Clear all appliances",
+                            "init": "Back",
+                        }
+                    )
+                }
+            ),
         )
 
     async def async_step_options_add_appliance(self, user_input=None):
