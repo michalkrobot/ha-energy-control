@@ -94,47 +94,63 @@ def _base_schema(defaults: dict) -> vol.Schema:
 def _appliance_schema(defaults: dict | None = None) -> vol.Schema:
     values = dict(APPLIANCE_DEFAULTS)
     values.update(defaults or {})
-    return vol.Schema(
-        {
-            vol.Required("name", default=values.get("name", "")): str,
-            vol.Required("type", default=values.get("type", "constant_load")): vol.In(
-                ["constant_load", "wallbox"]
+    schema: dict = {
+        vol.Required("name", default=values.get("name", "")): str,
+        vol.Required("type", default=values.get("type", "constant_load")): vol.In(
+            ["constant_load", "wallbox"]
+        ),
+        vol.Required("min_power", default=values.get("min_power", 0)): int,
+        vol.Optional(
+            "static_priority",
+            default=values.get("static_priority", APPLIANCE_DEFAULTS["static_priority"]),
+        ): int,
+        vol.Optional(
+            "minimal_running_minutes",
+            default=values.get(
+                "minimal_running_minutes", APPLIANCE_DEFAULTS["minimal_running_minutes"]
             ),
-            vol.Required("min_power", default=values.get("min_power", 0)): int,
-            vol.Optional("max_power", default=values.get("max_power")): vol.Any(int, None),
-            vol.Optional("step_power", default=values.get("step_power")): vol.Any(int, None),
-            vol.Optional("power_sensor", default=values.get("power_sensor")): selector.EntitySelector(
-                selector.EntitySelectorConfig(domain="sensor")
+        ): int,
+        vol.Optional(
+            "startup_time_minutes",
+            default=values.get(
+                "startup_time_minutes", APPLIANCE_DEFAULTS["startup_time_minutes"]
             ),
-            vol.Required(
-                "switch_sensor",
-                default=values.get("switch_sensor", ""),
-            ): selector.EntitySelector(selector.EntitySelectorConfig()),
-            vol.Required(
-                "availability_sensor",
-                default=values.get("availability_sensor", ""),
-            ): selector.EntitySelector(selector.EntitySelectorConfig()),
-            vol.Optional(
-                "static_priority",
-                default=values.get("static_priority", APPLIANCE_DEFAULTS["static_priority"]),
-            ): int,
-            vol.Optional("priority_sensor", default=values.get("priority_sensor")): selector.EntitySelector(
-                selector.EntitySelectorConfig()
-            ),
-            vol.Optional(
-                "minimal_running_minutes",
-                default=values.get(
-                    "minimal_running_minutes", APPLIANCE_DEFAULTS["minimal_running_minutes"]
-                ),
-            ): int,
-            vol.Optional(
-                "startup_time_minutes",
-                default=values.get(
-                    "startup_time_minutes", APPLIANCE_DEFAULTS["startup_time_minutes"]
-                ),
-            ): int,
-        }
-    )
+        ): int,
+    }
+
+    if values.get("max_power") is not None:
+        schema[vol.Optional("max_power", default=values["max_power"])] = int
+    else:
+        schema[vol.Optional("max_power")] = int
+
+    if values.get("step_power") is not None:
+        schema[vol.Optional("step_power", default=values["step_power"])] = int
+    else:
+        schema[vol.Optional("step_power")] = int
+
+    power_selector = selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor"))
+    if values.get("power_sensor"):
+        schema[vol.Optional("power_sensor", default=values["power_sensor"])] = power_selector
+    else:
+        schema[vol.Optional("power_sensor")] = power_selector
+
+    any_entity_selector = selector.EntitySelector(selector.EntitySelectorConfig())
+    if values.get("switch_sensor"):
+        schema[vol.Required("switch_sensor", default=values["switch_sensor"])] = any_entity_selector
+    else:
+        schema[vol.Required("switch_sensor")] = any_entity_selector
+
+    if values.get("availability_sensor"):
+        schema[vol.Required("availability_sensor", default=values["availability_sensor"])] = any_entity_selector
+    else:
+        schema[vol.Required("availability_sensor")] = any_entity_selector
+
+    if values.get("priority_sensor"):
+        schema[vol.Optional("priority_sensor", default=values["priority_sensor"])] = any_entity_selector
+    else:
+        schema[vol.Optional("priority_sensor")] = any_entity_selector
+
+    return vol.Schema(schema)
 
 
 class FVEControlConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
