@@ -277,6 +277,7 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
         if user_input is not None:
             for key, value in user_input.items():
                 self._data[key] = value
+            self._persist_options()
             return await self.async_step_init()
 
         return self.async_show_form(
@@ -321,6 +322,7 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
             appliance = dict(APPLIANCE_DEFAULTS)
             appliance.update(user_input)
             self._appliances.append(appliance)
+            self._persist_options()
             return await self.async_step_manage_appliances()
 
         return self.async_show_form(
@@ -339,6 +341,7 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
             idx = int(user_input["appliance"])
             if 0 <= idx < len(self._appliances):
                 self._appliances.pop(idx)
+                self._persist_options()
             return await self.async_step_manage_appliances()
 
         return self.async_show_form(
@@ -382,6 +385,7 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
             updated.update(user_input)
             self._appliances[idx] = updated
             self._selected_appliance_idx = None
+            self._persist_options()
             return await self.async_step_manage_appliances()
 
         return self.async_show_form(
@@ -395,6 +399,7 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
         if user_input is not None:
             if user_input.get("confirm"):
                 self._appliances = []
+                self._persist_options()
             return await self.async_step_manage_appliances()
 
         return self.async_show_form(
@@ -408,6 +413,12 @@ class FVEControlOptionsFlow(config_entries.OptionsFlowWithReload):
         options = dict(self._data)
         options["appliances"] = self._appliances
         return self.async_create_entry(title="", data=options)
+
+    def _persist_options(self) -> None:
+        """Persist current options immediately while user navigates options flow."""
+        options = dict(self._data)
+        options["appliances"] = self._appliances
+        self.hass.config_entries.async_update_entry(self._entry, options=options)
 
 
 def _appliance_choice_map(appliances: list[dict]) -> dict[str, str]:

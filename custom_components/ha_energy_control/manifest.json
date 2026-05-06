@@ -7,6 +7,6 @@
   "iot_class": "calculated",
   "name": "HA Energy Control",
   "requirements": ["requests"],
-  "version": "0.4.4"
+  "version": "0.4.5"
 }
 
